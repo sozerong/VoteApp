@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 function LoginPage({ onSuccess }) {
+  const navigate = useNavigate();
   const [studentId, setStudentId] = useState("");
   const [name, setName] = useState("");
   const [error, setError] = useState("");
@@ -29,6 +31,7 @@ function LoginPage({ onSuccess }) {
 
       if (res?.data?.can_vote) {
         onSuccess({ student_id: studentId, name }); // 투표 화면으로 이동
+        navigate("/vote");  // ✅ 여기서 화면 전환 발생
       } else if (res?.data?.can_vote === false) {
         setError("❌ 이미 투표하셨습니다.");
       } else {
