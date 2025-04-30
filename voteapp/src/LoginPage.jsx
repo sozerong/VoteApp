@@ -3,7 +3,7 @@ import axios from "axios";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-function LoginPage({ onSuccess, onShowResults }) {
+function LoginPage({ onSuccess }) {
   const [studentId, setStudentId] = useState("");
   const [name, setName] = useState("");
   const [error, setError] = useState("");
@@ -104,25 +104,9 @@ function LoginPage({ onSuccess, onShowResults }) {
             border: "none",
             borderRadius: "8px",
             cursor: "pointer",
-            marginBottom: "10px",
           }}
         >
           {loading ? "확인 중..." : "✅ 투표하기"}
-        </button>
-
-        {/* 선택: 관리자 결과 확인 버튼 */}
-        <button
-          onClick={onShowResults}
-          style={{
-            background: "transparent",
-            color: "#666",
-            fontSize: "14px",
-            textDecoration: "underline",
-            cursor: "pointer",
-            border: "none",
-          }}
-        >
-          📊 결과 보기
         </button>
 
         {error && <div style={{ color: "red", marginTop: "10px" }}>{error}</div>}
