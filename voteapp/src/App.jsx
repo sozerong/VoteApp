@@ -1,15 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import LoginPage from "./LoginPage";
 import VotePage from "./VotePage";
 import ResultPage from "./ResultPage";
+import ResultAdminPage from "./ResultAdminPage";
 
 function App() {
-  const [user, setUser] = useState(null);
-  const [showResults, setShowResults] = useState(false);
-
-  if (showResults) return <ResultPage onBack={() => setShowResults(false)} />;
-  if (!user) return <LoginPage onSuccess={setUser} onShowResults={() => setShowResults(true)} />;
-  return <VotePage user={user} onLogout={() => setUser(null)} />;
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/vote" element={<VotePage />} />
+        <Route path="/result" element={<ResultPage />} />
+        <Route path="/result-admin" element={<ResultAdminPage />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
