@@ -7,12 +7,16 @@ function LoginPage({ onSuccess, onShowResults }) {
   const [studentId, setStudentId] = useState("");
   const [name, setName] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
+    setError("");
     if (!studentId || !name) {
       setError("학번과 이름을 모두 입력해주세요.");
       return;
     }
+
+    setLoading(true);
 
     try {
       const res = await axios.post(`${BACKEND_URL}/can_vote`, {
@@ -20,14 +24,21 @@ function LoginPage({ onSuccess, onShowResults }) {
         name,
       });
 
-      if (res.data.can_vote) {
+      console.log("✅ 서버 응답:", res.data);
+
+      if (res?.data?.can_vote) {
         onSuccess({ student_id: studentId, name });
-      } else {
+      } else if (res?.data?.can_vote === false) {
         setError("❌ 이미 투표하셨습니다.");
+      } else {
+        setError("⚠️ 서버 응답이 예상과 다릅니다.");
       }
     } catch (err) {
+      console.error("❌ 서버 오류:", err);
       setError("서버와의 연결에 실패했습니다.");
     }
+
+    setLoading(false);
   };
 
   return (
@@ -83,10 +94,11 @@ function LoginPage({ onSuccess, onShowResults }) {
 
         <button
           onClick={handleSubmit}
+          disabled={loading}
           style={{
             width: "100%",
             padding: "12px",
-            backgroundColor: "#007BFF",
+            backgroundColor: loading ? "#aaa" : "#007BFF",
             color: "#fff",
             fontSize: "16px",
             border: "none",
@@ -95,7 +107,22 @@ function LoginPage({ onSuccess, onShowResults }) {
             marginBottom: "10px",
           }}
         >
-          ✅ 투표하기
+          {loading ? "확인 중..." : "✅ 투표하기"}
+        </button>
+
+        {/* 선택: 관리자 결과 확인 버튼 */}
+        <button
+          onClick={onShowResults}
+          style={{
+            background: "transparent",
+            color: "#666",
+            fontSize: "14px",
+            textDecoration: "underline",
+            cursor: "pointer",
+            border: "none",
+          }}
+        >
+          📊 결과 보기
         </button>
 
         {error && <div style={{ color: "red", marginTop: "10px" }}>{error}</div>}
