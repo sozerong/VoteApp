@@ -20,6 +20,7 @@ function LoginPage({ onSuccess, onShowResults }) {
     }
   };
 
+  
   return (
     <div style={{ textAlign: "center", padding: "30px" }}>
       <h2>학번과 이름을 입력해주세요</h2>
@@ -27,9 +28,6 @@ function LoginPage({ onSuccess, onShowResults }) {
       <input value={name} onChange={(e) => setName(e.target.value)} placeholder="이름" />
       <br />
       <button onClick={handleSubmit}>투표하기</button>
-      <button onClick={onShowResults} style={{ marginLeft: "10px" }}>
-        결과 보기
-      </button>
       <div style={{ color: "red" }}>{error}</div>
     </div>
   );
