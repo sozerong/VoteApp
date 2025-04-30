@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ConfirmModal from "./components/ConfirmModal";
+import CompleteModal from "./components/CompleteModal"; // ✅ 추가
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const GITHUB_IMAGE_BASE = "https://raw.githubusercontent.com/sozerong/VotePoster/main";
@@ -8,21 +9,22 @@ const GITHUB_IMAGE_BASE = "https://raw.githubusercontent.com/sozerong/VotePoster
 function VotePage({ user, onLogout }) {
   const [teams, setTeams] = useState([]);
   const [selectedTeam, setSelectedTeam] = useState(null);
-  const [showModal, setShowModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false); // 1단계
+  const [showCompleteModal, setShowCompleteModal] = useState(false); // 2단계
 
   useEffect(() => {
     axios.get(`${BACKEND_URL}/teams`).then((res) => setTeams(res.data));
   }, []);
 
   const handleVoteClick = (teamId) => {
-    setSelectedTeam(teams.find((t) => t.id === teamId)); // ✅ 팀 전체 정보 저장
-    setShowModal(true);
+    setSelectedTeam(teams.find((t) => t.id === teamId));
+    setShowConfirmModal(true);
   };
 
   const confirmVote = async () => {
     await axios.post(`${BACKEND_URL}/vote/${selectedTeam.id}`, user);
-    setShowModal(false);
-    onLogout();
+    setShowConfirmModal(false);
+    setShowCompleteModal(true); // ✅ 2단계로 전환
   };
 
   const rows = [teams.slice(0, 5), teams.slice(5, 10)];
@@ -41,7 +43,7 @@ function VotePage({ user, onLogout }) {
                   cursor: "pointer",
                   width: "200px",
                   textAlign: "center",
-                  transition: "transform 0.3s ease", // ✅ 확대 효과
+                  transition: "transform 0.3s ease",
                 }}
                 onClick={() => handleVoteClick(team.id)}
                 onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
@@ -63,20 +65,21 @@ function VotePage({ user, onLogout }) {
         ))}
       </div>
 
-      {/* ✅ 선택한 팀 정보 안내 */}
-      {selectedTeam && showModal && (
-        <p style={{ marginTop: "20px", fontSize: "16px", color: "#666" }}>
-          선택한 팀: <strong>{selectedTeam.name}</strong>
-        </p>
-      )}
-
-      {/* ✅ 확인 모달 */}
-      {showModal && (
+      {/* ✅ 1단계 확인 모달 */}
+      {showConfirmModal && selectedTeam && (
         <ConfirmModal
           title="투표 확인"
-          message="정말 이 팀에 투표하시겠습니까?"
+          message={`정말 '${selectedTeam.name}' 팀에 투표하시겠습니까?`}
           onConfirm={confirmVote}
-          onCancel={() => setShowModal(false)}
+          onCancel={() => setShowConfirmModal(false)}
+        />
+      )}
+
+      {/* ✅ 2단계 완료 모달 */}
+      {showCompleteModal && (
+        <CompleteModal
+          message="✅ 투표가 완료되었습니다!"
+          onClose={onLogout}
         />
       )}
     </div>
