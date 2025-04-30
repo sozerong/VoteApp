@@ -17,19 +17,26 @@ function VotePage({ user, onLogout }) {
     onLogout(); // 다시 로그인 화면으로
   };
 
+  // 5개씩 2줄로 나누기
+  const rows = [teams.slice(0, 5), teams.slice(5, 10)];
+
   return (
     <div style={{ textAlign: "center", padding: "20px" }}>
       <h2>포스터를 클릭해 투표하세요</h2>
-      <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "20px" }}>
-        {teams.map((team) => (
-          <div key={team.id} style={{ textAlign: "center", width: "200px" }}>
-            <img
-              src={`${GITHUB_IMAGE_BASE}/poster${team.id}.png`}
-              alt={team.name}
-              style={{ width: "100%", cursor: "pointer" }}
-              onClick={() => vote(team.id)}
-            />
-            <p>{team.name}</p>
+      <div style={{ display: "flex", flexDirection: "column", gap: "40px", alignItems: "center" }}>
+        {rows.map((row, rowIndex) => (
+          <div key={rowIndex} style={{ display: "flex", gap: "20px" }}>
+            {row.map((team) => (
+              <div key={team.id} style={{ textAlign: "center", width: "200px" }}>
+                <img
+                  src={`${GITHUB_IMAGE_BASE}/poster${team.id}.png`}
+                  alt={team.name}
+                  style={{ width: "100%", cursor: "pointer", borderRadius: "10px" }}
+                  onClick={() => vote(team.id)}
+                />
+                <p>{team.name}</p>
+              </div>
+            ))}
           </div>
         ))}
       </div>
