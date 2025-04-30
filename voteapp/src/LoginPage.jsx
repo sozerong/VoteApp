@@ -92,10 +92,11 @@ function LoginPage({ onSuccess }) {
           }}
         />
 
+        {typeof handleSubmit === "function" && (
         <button
-          onClick={handleSubmit}
-          disabled={loading}
-          style={{
+            onClick={handleSubmit}
+            disabled={loading}
+            style={{
             width: "100%",
             padding: "12px",
             backgroundColor: loading ? "#aaa" : "#007BFF",
@@ -103,11 +104,13 @@ function LoginPage({ onSuccess }) {
             fontSize: "16px",
             border: "none",
             borderRadius: "8px",
-            cursor: "pointer",
-          }}
+            cursor: loading ? "not-allowed" : "pointer",
+            }}
         >
-          {loading ? "확인 중..." : "✅ 투표하기"}
+            {loading ? "확인 중..." : "✅ 투표하기"}
         </button>
+        )}
+
 
         {error && <div style={{ color: "red", marginTop: "10px" }}>{error}</div>}
       </div>
