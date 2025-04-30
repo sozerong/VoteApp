@@ -9,6 +9,7 @@ function LoginPage({ onSuccess }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // 🔄 제출 핸들러
   const handleSubmit = async () => {
     setError("");
     if (!studentId || !name) {
@@ -27,7 +28,7 @@ function LoginPage({ onSuccess }) {
       console.log("✅ 서버 응답:", res.data);
 
       if (res?.data?.can_vote) {
-        onSuccess({ student_id: studentId, name });
+        onSuccess({ student_id: studentId, name }); // 투표 화면으로 이동
       } else if (res?.data?.can_vote === false) {
         setError("❌ 이미 투표하셨습니다.");
       } else {
@@ -92,11 +93,10 @@ function LoginPage({ onSuccess }) {
           }}
         />
 
-        {typeof handleSubmit === "function" && (
         <button
-            onClick={handleSubmit}
-            disabled={loading}
-            style={{
+          onClick={handleSubmit}
+          disabled={loading}
+          style={{
             width: "100%",
             padding: "12px",
             backgroundColor: loading ? "#aaa" : "#007BFF",
@@ -105,12 +105,10 @@ function LoginPage({ onSuccess }) {
             border: "none",
             borderRadius: "8px",
             cursor: loading ? "not-allowed" : "pointer",
-            }}
+          }}
         >
-            {loading ? "확인 중..." : "✅ 투표하기"}
+          {loading ? "확인 중..." : "✅ 투표하기"}
         </button>
-        )}
-
 
         {error && <div style={{ color: "red", marginTop: "10px" }}>{error}</div>}
       </div>
