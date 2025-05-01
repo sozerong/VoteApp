@@ -7,7 +7,7 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 function ResultAdminPage() {
   const [teams, setTeams] = useState([]);
   const [voters, setVoters] = useState([]);
-  const [showResetModal, setShowResetModal] = useState(false); // ✅ 모달 상태
+  const [showResetModal, setShowResetModal] = useState(false);
 
   useEffect(() => {
     axios.get(`${BACKEND_URL}/results_full`).then((res) => {
@@ -19,6 +19,21 @@ function ResultAdminPage() {
   const handleReset = async () => {
     await axios.post(`${BACKEND_URL}/reset`);
     window.location.reload();
+  };
+
+  // ✅ DB 백업 요청
+  const handleBackup = async () => {
+    try {
+      const res = await axios.post(`${BACKEND_URL}/backup_db`);
+      alert(res.data.success ? "✅ DB 백업이 완료되었습니다." : `❌ 실패: ${res.data.message}`);
+    } catch (err) {
+      alert("❌ 백업 요청 중 오류 발생");
+    }
+  };
+
+  // ✅ 백업 파일 다운로드
+  const handleDownload = () => {
+    window.open(`${BACKEND_URL}/download_backup`, "_blank");
   };
 
   return (
@@ -48,6 +63,35 @@ function ResultAdminPage() {
       </div>
 
       <hr style={{ margin: "40px 0" }} />
+
+      <div style={{ display: "flex", gap: "12px", justifyContent: "center", marginBottom: "20px" }}>
+        <button
+          onClick={handleBackup}
+          style={{
+            padding: "10px 20px",
+            background: "#0275d8",
+            color: "white",
+            border: "none",
+            borderRadius: "6px",
+            cursor: "pointer",
+          }}
+        >
+          💾 DB 백업
+        </button>
+        <button
+          onClick={handleDownload}
+          style={{
+            padding: "10px 20px",
+            background: "#5cb85c",
+            color: "white",
+            border: "none",
+            borderRadius: "6px",
+            cursor: "pointer",
+          }}
+        >
+          ⬇ 백업 다운로드
+        </button>
+      </div>
 
       <button
         onClick={() => setShowResetModal(true)}
