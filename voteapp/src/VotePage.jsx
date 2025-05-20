@@ -27,7 +27,10 @@ function VotePage({ user, onLogout }) {
     setShowCompleteModal(true); // ✅ 2단계로 전환
   };
 
-  const rows = [teams.slice(0, 5), teams.slice(5)];
+    // 🔧 5개 + 나머지 방식
+  const firstRowCount = 5;
+  const rows = [teams.slice(0, firstRowCount), teams.slice(firstRowCount)];
+
 
 
   return (
