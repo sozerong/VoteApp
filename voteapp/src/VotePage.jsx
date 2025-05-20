@@ -27,7 +27,8 @@ function VotePage({ user, onLogout }) {
     setShowCompleteModal(true); // ✅ 2단계로 전환
   };
 
-  const rows = [teams.slice(0, 5), teams.slice(5, 10)];
+  const rows = [teams.slice(0, 5), teams.slice(5)];
+
 
   return (
     <div style={{ textAlign: "center", padding: "40px", backgroundColor: "#f9f9f9", fontFamily: "Arial" }}>
