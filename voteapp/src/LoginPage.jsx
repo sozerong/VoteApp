@@ -66,7 +66,7 @@ function LoginPage({ onSuccess }) {
           textAlign: "center",
         }}
       >
-        <h2 style={{ marginBottom: "30px", color: "#333" }}>🎓 학번과 이름을 입력해주세요</h2>
+        <h2 style={{ marginBottom: "30px", color: "#333" }}>학번과 이름을 입력해주세요</h2>
 
         <input
           value={studentId}
@@ -110,7 +110,7 @@ function LoginPage({ onSuccess }) {
             cursor: loading ? "not-allowed" : "pointer",
           }}
         >
-          {loading ? "확인 중..." : "✅ 투표하기"}
+          {loading ? "확인 중..." : "투표하기"}
         </button>
 
         {error && <div style={{ color: "red", marginTop: "10px" }}>{error}</div>}

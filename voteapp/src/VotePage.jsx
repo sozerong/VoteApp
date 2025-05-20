@@ -27,15 +27,16 @@ function VotePage({ user, onLogout }) {
     setShowCompleteModal(true); // ✅ 2단계로 전환
   };
 
-    // 🔧 5개 + 나머지 방식
-  const firstRowCount = 5;
-  const rows = [teams.slice(0, firstRowCount), teams.slice(firstRowCount)];
+  const itemsPerRow = 5;
+  const rows = Array.from({ length: Math.ceil(teams.length / itemsPerRow) }, (_, i) =>
+    teams.slice(i * itemsPerRow, (i + 1) * itemsPerRow)
+  );
 
 
 
   return (
     <div style={{ textAlign: "center", padding: "40px", backgroundColor: "#f9f9f9", fontFamily: "Arial" }}>
-      <h2>📢 포스터를 클릭해 투표하세요!</h2>
+      <h2>포스터를 클릭해 투표하세요!</h2>
 
       <div style={{ display: "flex", flexDirection: "column", gap: "40px", alignItems: "center" }}>
         {rows.map((row, i) => (
@@ -82,7 +83,7 @@ function VotePage({ user, onLogout }) {
       {/* ✅ 2단계 완료 모달 */}
       {showCompleteModal && (
         <CompleteModal
-          message="✅ 투표가 완료되었습니다!"
+          message="투표가 완료되었습니다!"
           onClose={onLogout}
         />
       )}
